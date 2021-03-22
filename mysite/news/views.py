@@ -27,9 +27,9 @@ def add_news(request):
     if request.method == 'POST':
         form = NewsForm(request.POST)
         if form.is_valid():
-            news = News.objects.create(**form.cleaned_data)
+            news = form.save()
             return redirect(news)
 
     else:
-        form = NewsForm(initial={'is_published': True})
+        form = NewsForm()
     return render(request, 'news/add_news.html', {'form': form})
