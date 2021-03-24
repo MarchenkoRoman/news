@@ -27,7 +27,7 @@ class NewsByCategory(ListView):
     allow_empty = False
 
     def get_queryset(self):
-        return News.objects.filter(category_id=self.kwargs['category_id'] ,is_published=True)
+        return News.objects.filter(category_id=self.kwargs['category_id'], is_published=True)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(NewsByCategory, self).get_context_data(**kwargs)
