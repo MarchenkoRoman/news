@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView
 from django.urls import reverse_lazy
 from django.http import HttpResponse
@@ -10,14 +10,15 @@ class HomeNews(ListView):
     model = News
     template_name = 'news/index.html'
     context_object_name = 'news'
+    queryset = News.objects.select_related('category')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(HomeNews, self).get_context_data(**kwargs)
         context['title'] = 'Главная страница'
         return context
-
-    def get_queryset(self):
-        return News.objects.filter(is_published=True)
+    #
+    # def get_queryset(self):
+    #     return News.objects.filter(is_published=True).select_related('category')
 
 
 class NewsByCategory(ListView):
@@ -27,7 +28,7 @@ class NewsByCategory(ListView):
     allow_empty = False
 
     def get_queryset(self):
-        return News.objects.filter(category_id=self.kwargs['category_id'], is_published=True)
+        return News.objects.filter(category_id=self.kwargs['category_id'], is_published=True).select_related('category')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(NewsByCategory, self).get_context_data(**kwargs)
@@ -42,10 +43,11 @@ class ViewNews(DetailView):
     template_name = 'news/view_news.html'
 
 
-class AddNews(CreateView):
+class AddNews(LoginRequiredMixin, CreateView):
     form_class = NewsForm
     template_name = 'news/add_news.html'
     success_url = reverse_lazy('news:home')
+    login_url = '/admin/'
 
 
 # def add_news(request):
