@@ -1,12 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView
 from django.urls import reverse_lazy
 from django.http import HttpResponse
 from .models import News, Category
-from .forms import NewsForm, UserRegisterForm, UserLoginForm
+from .forms import NewsForm, UserRegisterForm, UserLoginForm, ContactForm
 
 
 def register(request):
@@ -85,6 +86,24 @@ class AddNews(LoginRequiredMixin, CreateView):
     template_name = 'news/add_news.html'
     success_url = reverse_lazy('news:home')
     login_url = '/admin/'
+
+
+def test(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            mail = send_mail(form.cleaned_data['subject'],
+                             form.cleaned_data['content'],
+                             'roma@econom-apteka.ks.ua',
+                             ['roma@econom-apteka.ks.ua', 'sysadmin@econom-apteka.ks.ua'],
+                             fail_silently=False)
+            if mail:
+                messages.success(request, 'Письмо отправленно успешно')
+            else:
+                messages.error(request, 'Ошибка отправки')
+    else:
+        form = ContactForm()
+    return render(request, 'news/test.html', {'form': form})
 
 
 # def add_news(request):

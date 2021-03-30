@@ -20,7 +20,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('news.urls', namespace='news'))
+    path('ckeditor/', include('ckeditor_uploader.urls')),
+    path('', include('news.urls', namespace='news')),
 ]
 
 if settings.DEBUG:
