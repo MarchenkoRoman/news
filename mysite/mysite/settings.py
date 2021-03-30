@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'ckeditor',
     'ckeditor_uploader',
+    'captcha',
     'news.apps.NewsConfig',
 ]
 
@@ -136,6 +137,13 @@ MEDIA_URL = '/media/'
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_DIR, 'django-cache'),
+    }
+}
 
 EMAIL_HOST = 'smtp.econom-apteka.ks.ua'
 EMAIL_PORT = 2525

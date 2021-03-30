@@ -10,6 +10,7 @@
                 <li class="nav-item"><a class="nav-link" href="{% url "news:home" %}">Главная</a></li>
                 {% if request.user.is_authenticated %}
                 <li class="nav-item"><a class="nav-link" href="{% url "news:add_news" %}">Добавить новость</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url "news:contact" %}">Контакты</a></li>
                 {% endif %}
             </ul>
             <span class="navbar-text">
